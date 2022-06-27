@@ -1,0 +1,24 @@
+{
+	"id": "f977353d-1e4e-41f3-8532-927a95449bf1",
+	"name": "ContactEnvironment",
+	"values": [
+		{
+			"key": "contactId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "contactEmailCounter",
+			"value": "10002",
+			"enabled": true
+		},
+		{
+			"key": "emailValue",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2022-06-27T06:44:11.191Z",
+	"_postman_exported_using": "Postman/8.11.1"
+}

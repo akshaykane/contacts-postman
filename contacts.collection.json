@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "6ce0a318-95ab-4f47-8d82-32db6c42b223",
+		"name": "TestCollectionAk1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TestFolderAk1",
+			"item": [
+				{
+					"name": "GetAllContacts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response header Content-Type is application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://ancient-woodland-30424.herokuapp.com/api/contacts/",
+							"protocol": "https",
+							"host": [
+								"ancient-woodland-30424",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetContactById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://ancient-woodland-30424.herokuapp.com/api/contacts/61dac9c87a98436568819acd",
+							"protocol": "https",
+							"host": [
+								"ancient-woodland-30424",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"contacts",
+								"61dac9c87a98436568819acd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateContact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"contactId\", jsonData.data.id);\r",
+									"\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//var emailCounterValue = Number(pm.environment.get(\"contactEmailCounter\"));\r",
+									"//pm.environment.set(\"contactEmailCounter\", emailCounterValue+1);\r",
+									"//var emailValue = \"test\" + pm.environment.get(\"contactEmailCounter\") + \"@qwerty.com\";\r",
+									"//pm.environment.set(\"emailValue\",emailValue);\r",
+									"\r",
+									"var emailValue = \"test\" + Math.floor((Math.random()*10000000 +1)) + \"@qwerty.com\";\r",
+									"pm.environment.set(\"emailValue\",emailValue);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\" : \"a1\",\r\n    \"lastName\" : \"k1\",\r\n    \"email\" : \"{{emailValue}}\",\r\n    \"phone\" : \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ancient-woodland-30424.herokuapp.com/api/contacts/",
+							"protocol": "https",
+							"host": [
+								"ancient-woodland-30424",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetContactById-EnvVar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Contact retrieved!\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.id).to.eql(pm.environment.get(\"contactId\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://ancient-woodland-30424.herokuapp.com/api/contacts/{{contactId}}",
+							"protocol": "https",
+							"host": [
+								"ancient-woodland-30424",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TestFolderAk2",
+			"item": [
+				{
+					"name": "CreateContactWithoutEmail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate error from response json\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.errors[0].msg).to.eql(\"Invalid value\");\r",
+									"    pm.expect(jsonData.errors[0].param).to.eql(\"email\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\" : \"a1\",\r\n    \"lastName\" : \"k1\",\r\n    \"phone\" : \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ancient-woodland-30424.herokuapp.com/api/contacts/",
+							"protocol": "https",
+							"host": [
+								"ancient-woodland-30424",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetContactByInvalidId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains proper error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Malformatted id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://ancient-woodland-30424.herokuapp.com/api/contacts/123",
+							"protocol": "https",
+							"host": [
+								"ancient-woodland-30424",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"contacts",
+								"123"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Response time is less than 4000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+					"});"
+				]
+			}
+		}
+	]
+}
